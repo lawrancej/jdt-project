@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}
+
+repositories {
+    maven {
+        url 'https://repo.eclipse.org/content/repositories/eclipse-staging/'
+    }
+	mavenCentral()
+}
+
+dependencies {
+    compile 'org.eclipse.jdt:org.eclipse.jdt.core:3.10.0.v20140522-1230'
+}
