@@ -1,0 +1,9 @@
+= Traverse Java Code
+
+From the command line:
+
+---
+./gradlew build   # Build the source
+./gradlew run     # Run the test program
+./gradlew eclipse # Generate eclipse project
+---
