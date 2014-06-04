@@ -1123,15 +1123,16 @@ public class AstVisitor extends ASTVisitor {
 	}
 
 	public boolean DEBUG;
+	
 	List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
 
-	  @Override
-	  public boolean visit(MethodDeclaration node) {
-	    methods.add(node);
-	    return super.visit(node);
-	  }
+	@Override
+	public boolean visit(MethodDeclaration node) {
+		methods.add(node);
+		return super.visit(node);
+	}
 
-	  public List<MethodDeclaration> getMethods() {
-	    return methods;
-	  }
+	public List<MethodDeclaration> getMethods() {
+		return methods;
+	}
 }
