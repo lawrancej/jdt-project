@@ -8,3 +8,4 @@ From the command line:
 ./gradlew eclipse # Generate eclipse project
 ----
 
+Then, in Eclipse, go to 'Import' -> 'Existing Projects into Workspace' and look for this project.
