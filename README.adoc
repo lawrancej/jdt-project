@@ -1,5 +1,6 @@
 = Traverse Java Code
 
+== Setup HOW-TO
 From the command line:
 
 ----
@@ -9,3 +10,7 @@ From the command line:
 ----
 
 Then, in Eclipse, go to 'Import' -> 'Existing Projects into Workspace' and look for this project.
+
+== Documentation
+
+http://help.eclipse.org/helios/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Foverview-summary.html[Eclipse JDT]
