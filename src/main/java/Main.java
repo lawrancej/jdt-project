@@ -1,34 +1,43 @@
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.equinox.app.IApplication;
-import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 
-class Main implements IApplication {
-	public static void main(String[] args) throws CoreException {
-		
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		IProject project = root.getProject("folly");
-		project.create(null);
-		project.open(null);
+
+class Main  {
+	@Argument
+	private List<String> folders = new ArrayList<String>();
+
+	EclipseAstParser parser = new EclipseAstParser();
+
+	public void visitFile(File f) throws IOException {
+		if (f.isDirectory()) {
+			for (File child : f.listFiles()) {
+				visitFile(child);
+			}
+		}
+		if (f.getName().endsWith(".java")) {
+			AstVisitor v = parser.visitFile(f);
+			for (MethodDeclaration method : v.methods)
+				System.out.format("%s: %s\n", f.getName(), method.getName());
+		}
 	}
 
-	@Override
-	public Object start(IApplicationContext context) throws Exception {
-		System.out.println("Hello World!");
-		final Map args = context.getArguments();
-		final String[] appArgs = (String[]) args.get("application.args");
-		main(appArgs);
-		// TODO Auto-generated method stub
-		return IApplication.EXIT_OK;
-	}
+	public void doMain(String[] args) throws CmdLineException, IOException {
+		CmdLineParser argParser = new CmdLineParser(this);
+		argParser.parseArgument(args);
 
-	@Override
-	public void stop() {
-		// TODO Auto-generated method stub
-		
+		for (String folder : folders) {
+			visitFile(new File(folder));
+		}
+		System.out.println("hi?");
+	}
+	public static void main(String[] args) throws IOException, CmdLineException {
+		new Main().doMain(args);
 	}
 }
