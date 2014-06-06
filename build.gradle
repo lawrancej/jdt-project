@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
+    }
+}
+
+apply plugin: 'fatjar'
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'application'
@@ -9,6 +21,23 @@ description = 'Project'
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
+
+jar {
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    manifest {
+        attributes("Main-Class": "Main")
+    }
+}
+
+fatJar {
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    manifest {
+        attributes("Main-Class": "Main")
+    }
+}
+
 
 repositories {
     maven {

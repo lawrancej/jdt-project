@@ -1,4 +1,4 @@
-// Credit: http://blog.pdark.de/2010/11/05/using-eclipse-to-parse-java-code/
+// Adapted from: http://blog.pdark.de/2010/11/05/using-eclipse-to-parse-java-code/
 
 import java.io.*;
 import java.util.LinkedHashSet;
@@ -15,18 +15,22 @@ public class EclipseAstParser {
     public static final String VERSION_1_4 = "1.4";
     public static final String VERSION_1_5 = "1.5";
     public static final String VERSION_1_6 = "1.6";
+    public static final String VERSION_1_7 = "1.7";
+    public static final String VERSION_1_8 = "1.8";
  
     private static final Set<String> ALLOWED_TARGET_JDKS = new LinkedHashSet<String>();
     static {
         ALLOWED_TARGET_JDKS.add(VERSION_1_4);
         ALLOWED_TARGET_JDKS.add(VERSION_1_5);
         ALLOWED_TARGET_JDKS.add(VERSION_1_6);
+        ALLOWED_TARGET_JDKS.add(VERSION_1_7);
+        ALLOWED_TARGET_JDKS.add(VERSION_1_8);
     }
  
     private static final Logger log = Logger.getLogger(EclipseAstParser.class);
     public static boolean DEBUG;
  
-    private String targetJdk = VERSION_1_4;
+    private String targetJdk = VERSION_1_8;
     private String encoding = "UTF-8";
  
     public void setTargetJdk( String targetJdk ) {
@@ -44,13 +48,13 @@ public class EclipseAstParser {
         this.encoding = encoding;
     }
  
-    public AstVisitor visitFile( File file ) throws IOException {
+    public CompilationUnit getAST( File file ) throws IOException {
         if(!file.exists())
             new IllegalArgumentException("File "+file.getAbsolutePath()+" doesn't exist");
  
         String source = readFileToString( file, encoding );
  
-        return visitString( source );
+        return getAST( source );
     }
  
     public static String readFileToString( File file, String encoding ) throws IOException {
@@ -68,7 +72,7 @@ public class EclipseAstParser {
         return result;
     }
  
-    public AstVisitor visit( InputStream stream, String encoding ) throws IOException {
+    public CompilationUnit getAST( InputStream stream, String encoding ) throws IOException {
         if( stream == null )
             throw new IllegalArgumentException("stream is null");
         if( encoding == null )
@@ -78,7 +82,7 @@ public class EclipseAstParser {
  
         String source = readInputStreamToString( stream, encoding );
  
-        return visitString( source );
+        return getAST( source );
     }
  
     public static String readInputStreamToString( InputStream stream, String encoding ) throws IOException {
@@ -95,7 +99,7 @@ public class EclipseAstParser {
         return result.toString();
     }
  
-    public AstVisitor visitString( String source ) {
+    public CompilationUnit getAST( String source ) {
         ASTParser parser = ASTParser.newParser(AST.JLS3);
  
         @SuppressWarnings( "unchecked" )
@@ -109,7 +113,9 @@ public class EclipseAstParser {
                 log.warn("Unknown targetJdk ["+targetJdk+"]. Using "+VERSION_1_4+" for parsing. Supported values are: "
                         + VERSION_1_4 + ", "
                         + VERSION_1_5 + ", "
-                        + VERSION_1_6
+                        + VERSION_1_6 + ", "
+                        + VERSION_1_7 + ", "
+                        + VERSION_1_8
                 );
             }
             JavaCore.setComplianceOptions(JavaCore.VERSION_1_4, options);
@@ -122,13 +128,6 @@ public class EclipseAstParser {
         parser.setSource(source.toCharArray());
         parser.setIgnoreMethodBodies(false);
  
-        CompilationUnit ast = (CompilationUnit) parser.createAST(null);
- 
-        // AstVisitor extends org.eclipse.jdt.core.dom.ASTVisitor
-        AstVisitor visitor = new AstVisitor();
-        visitor.DEBUG = DEBUG;
-        ast.accept( visitor );
- 
-        return visitor;
+        return (CompilationUnit) parser.createAST(null);
     }
 }

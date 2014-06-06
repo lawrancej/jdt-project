@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -22,9 +23,13 @@ class Main  {
 			}
 		}
 		if (f.getName().endsWith(".java")) {
-			AstVisitor v = parser.visitFile(f);
-			for (MethodDeclaration method : v.methods)
-				System.out.format("%s: %s\n", f.getName(), method.getName());
+			CompilationUnit ast = parser.getAST(f);
+	        // AstVisitor extends org.eclipse.jdt.core.dom.ASTVisitor
+	        AstVisitor visitor = new AstVisitor();
+	        ast.accept( visitor );
+
+			for (MethodDeclaration method : visitor.methods)
+				System.out.format("%s.%s: %s\n", visitor.pakage, visitor.getKlass(), method.getName());
 		}
 	}
 
@@ -35,7 +40,6 @@ class Main  {
 		for (String folder : folders) {
 			visitFile(new File(folder));
 		}
-		System.out.println("hi?");
 	}
 	public static void main(String[] args) throws IOException, CmdLineException {
 		new Main().doMain(args);
