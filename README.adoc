@@ -4,9 +4,10 @@
 From the command line:
 
 ----
-./gradlew build   # Build the source
-./gradlew run     # Run the test program
-./gradlew eclipse # Generate eclipse project
+./gradlew build                                # Build the source
+./gradlew eclipse                              # Generate eclipse project
+./gradlew fatjar                               # Generate a jar file (this takes a while)
+java -jar build/libs/jdt-project-1-0.0.1.jar . # Run the program from the command line
 ----
 
 Then, in Eclipse, go to 'Import' -> 'Existing Projects into Workspace' and look for this project.
