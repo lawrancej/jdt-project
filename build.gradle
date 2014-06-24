@@ -19,7 +19,7 @@ version = '0.0.1'
 description = 'Project'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '1.12'
 }
 
 jar {
