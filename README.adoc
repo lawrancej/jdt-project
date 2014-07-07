@@ -51,7 +51,44 @@ case 'p':
 And so on.
 
 == Test-case generation
+This project also aims to generate a separate test suite for Java projects.
 
+The project should generate test classes for every method and every class for the system under test.
+It should distinguish test code from regular code in the project.
+
+For example, to test +Foo.baz+:
+
+----
+class Bar {
+    int x;
+    int y;
+    Bar(int x, int y) {
+    /* ... blah blah blah ... */
+    }
+}
+
+class Foo {
+
+    static int baz(Bar a, Bar b) {
+    /* ... blah blah blah ... */
+    }
+}
+----
+
+. We need to examine the method parameters of +baz+ and, in turn, construct instances of +Bar+.
+. This requires examining either the class structure or it requires looking for constructors of Bar.
+. This could, in turn, require more visits to other classes until we reach a primitive type, if the constructor itself requires non-primitive arguments.
+
+The idea is that we generate values for primitive types by generating values via brute force.
+
+So, a test suite for this would consist of something like this:
+
+----
+Foo.baz(new Bar(-1,-1), new Bar(0,0));
+Foo.baz(new Bar(0,0), new Bar(1,1));
+Foo.baz(new Bar(Integer.MAX_INT, Integer.MAX_INT), new Bar(Integer.MIN_INT, Integer.MIN_INT));
+... etc. ...
+----
 
 == Java source to C translation
 
