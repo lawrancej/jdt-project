@@ -1,5 +1,35 @@
 = Traverse Java Code
 
+== Documentation generator
+Generate Javadoc documentation stubs for code.
+
+For example, this would take code like this:
+
+----
+class Foo {
+    void frobnicate(Something x, SomethingElse y) {
+    /* ... blah */
+    }
+}
+----
+
+and generates comments like this:
+
+----
+class Foo {
+    /**
+     * frobnicates a Foo.
+     *
+     * @param x is a Something
+     * @param y is a SomethingElse
+     * @returns Nothing
+     */
+    void frobnicate(Something x, SomethingElse y) {
+    /* ... blah */
+    }
+}
+----
+
 == Automated refactoring
 This project aims to take a Java project and eliminate common errors in Freshman code, and in large projects.
 
