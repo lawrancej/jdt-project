@@ -120,9 +120,37 @@ Foo.baz(new Bar(Integer.MAX_INT, Integer.MAX_INT), new Bar(Integer.MIN_INT, Inte
 ... etc. ...
 ----
 
-== Java source to C translation
+== Java source to C++ translation
+Traverse through Java source and pretty print C++ equivalent code.
+There's a mismatch between C++ and Java, so therein lies the pain.
 
+== Search engine for code
+Index source code classes and methods, and their dependencies.
 
+For example,
+
+----
+class Bar {
+    int x;
+    int y;
+    Bar(int x, int y) {
+    /* ... blah blah blah ... */
+    }
+}
+
+class Foo {
+
+    static int baz(Bar a, Bar b) {
+    /* ... blah blah blah ... */
+    }
+}
+----
+
+In this example, the +baz+ method in +Foo+ uses +Bar+ objects, therefore +baz+ has a dependency on +Bar+
+
+Using this knowledge, we can build up a graph of dependencies among methods and types to make inferences about which types are 'central' in a project.
+
+Then, using PageRank, we can rank classes and methods by their centrality to the project to find useful code while doing keyword searches, presumably indexed using something like http://lucene.apache.org/[Lucene].
 
 == Setup HOW-TO
 From the command line:
