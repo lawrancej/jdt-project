@@ -1,5 +1,62 @@
 = Traverse Java Code
 
+== Automated refactoring
+This project aims to take a Java project and eliminate common errors in Freshman code, and in large projects.
+
+For example, it will translate code like this:
+
+----
+if (condition == true) {
+    /* ... blah ... */
+}
+----
+
+Into this:
+
+----
+if (condition) {
+    /* ... blah ... */
+}
+----
+
+It will translate code like this:
+
+----
+if (ch == 'c') {
+    /* ... blah ... */
+} else if (ch == 'f') {
+    /* ... blah ... */
+} else if (ch == 'p') {
+    /* ... blah ... */
+}
+----
+
+Into this:
+
+----
+switch (ch) {
+case 'c':
+    /* ... blah ... */
+    break;
+case 'f':
+    /* ... blah ... */
+    break;
+case 'p':
+    /* ... blah ... */
+    break;    
+}
+
+----
+
+And so on.
+
+== Test-case generation
+
+
+== Java source to C translation
+
+
+
 == Setup HOW-TO
 From the command line:
 
